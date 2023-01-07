@@ -78,7 +78,7 @@ productRouter.put("/:pid", async (req, res) => {
   }
 });
 
-productRouter.delete("/:pid", async (req, res) => {
+/*productRouter.delete("/:pid", async (req, res) => {
   const { pid } = req.params;
 
   try {
@@ -95,6 +95,6 @@ productRouter.delete("/:pid", async (req, res) => {
   } catch (err) {
     res.status(500).send(err.message);
   }
-});
+});*/
 
 export default productRouter;

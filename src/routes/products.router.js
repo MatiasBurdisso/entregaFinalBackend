@@ -1,100 +1,77 @@
-import express from "express";
-import { ProductFileManager } from "../classes/FileManager.js";
-import { v4 } from "uuid";
-import path from "path";
+import { Router, json } from "express";
+import { ProductsManager } from "../dao/index.js";
 
-const productRouter = express.Router();
-const productFileManager = new ProductFileManager(
-  path.resolve(process.cwd(), "public", "products.json")
-);
+let products = [];
 
-productRouter.get("/", async (req, res) => {
-  const { limit } = req.query;
+const productsRouter  = Router ();
+productsRouter.use(json());
+const productsManager = new ProductsManager();
 
-  try {
-    const products = await productFileManager.getAll();
 
-    if (limit) {
-      res.send(products.slice(0, limit));
-      return;
-    }
+productsRouter.get("/", async(req, res) => {
+    const products = await productsManager.getAll();
 
     res.send(products);
-  } catch (err) {
-    res.status(500).send(err.message);
-  }
 });
 
-productRouter.get("/:pid", async (req, res) => {
-  const { pid } = req.params;
+productsRouter.get("/:pid", async (req, res)=>{
 
-  try {
-    const products = await productFileManager.getAll();
+    try{
+        const {pid} = req.params
+        const product = await productsManager.getProductById(parseInt(pid))
+        res.send(product)
+    } catch(err) {
+        res.status(404).send(`${err}`)
+    }
+});
 
-    const product = products.find((product) => product.id === pid);
-    if (!product) {
-      res.status(404).send("Producto no encontrado");
-      return;
+productsRouter.post("/", async (req, res) => {
+    const {title, description, price, stock } = req.body;
+
+    if(!title || !description || !price || !stock) {
+        return res.status(400).send({ status:"error", payload: "Missing patameters"});
     }
 
-    res.send(product);
-  } catch (err) {
-    res.status(500).send(err.message);
-  }
+    const result = await productsManager.create({
+        title,
+        description,
+        price,
+        stock,
+    });
+
+    res.status(201).send({ status: "ok", payload: result});
 });
 
-productRouter.post("/", async (req, res) => {
-  const newProduct = {
-    id: v4(),
-    ...req.body,
-  };
 
-  try {
-    const products = await productFileManager.getAll();
-    await productFileManager.writeAll([...products, newProduct]);
-    res.send(newProduct);
-  } catch (err) {
-    res.status(500).send(err.message);
-  }
-});
+productsRouter.put("/products/:pid", async (req, res) =>{
+    try{
+        const {pid} = req.params
+        const id = parseInt(pid)
+        await manager.updatedProducts(id, req.body)
 
-productRouter.put("/:pid", async (req, res) => {
-  const { pid } = req.params;
-  const newProduct = req.body;
-
-  try {
-    const products = await productFileManager.getAll();
-    const productIndex = products.findIndex((product) => product.id === pid);
-    if (productIndex === -1) {
-      res.status(404).send("Producto no encontrado");
-      return;
+        const products = await productsManager.getProducts()
+        req.io.emit("update-product", products)
+    
+        res.send({status: "succes", payload: await productsManager.getProductById(id)})
+    }catch(err){
+        res.status(404).send({status: "error", error: `${err}`})
     }
-
-    products[productIndex] = newProduct;
-    await productFileManager.writeAll(products);
-    res.send(newProduct);
-  } catch (err) {
-    res.status(500).send(err.message);
-  }
 });
 
-/*productRouter.delete("/:pid", async (req, res) => {
-  const { pid } = req.params;
+productsRouter.delete("/:pid", async(req, res)=>{
+    try{
+        const {pid} = req.params
+        const id = parseInt(pid)
+        await productsManager.deleteProducts(id, req.body)
 
-  try {
-    const products = await productFileManager.getAll();
-    const productIndex = products.findIndex((product) => product.id === pid);
-    if (productIndex === -1) {
-      res.status(404).send("Producto no encontrado");
-      return;
+        const products = await productsManager.getProducts()
+        req.io.emit("delete-product", products)
+
+        res.send({status: "succes", payload: "Producto eliminado"})
+    } catch(err){
+        res.status(404).send({status: "error", error: `${err}`})
     }
+});
 
-    products.splice(productIndex, 1);
-    await productFileManager.writeAll(products);
-    res.send("Producto eliminado");
-  } catch (err) {
-    res.status(500).send(err.message);
-  }
-});*/
 
-export default productRouter;
+export default productsRouter;

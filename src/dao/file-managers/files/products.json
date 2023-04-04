@@ -1,0 +1,30 @@
+[
+    {
+      "title": "Parmechano",
+      "description": "Queso Parmesano",
+      "price": 1250,
+      "stock": 335,
+      "id": 0
+    },
+    {
+      "title": "Barrio Fino",
+      "description": "La pizza del Big Boss",
+      "price": 1350,
+      "stock": 335,
+      "id": 1
+    },
+    {
+      "title": "Culebrita",
+      "description": "La pizza de la Brita",
+      "price": 1300,
+      "stock": 335,
+      "id": 2
+    },
+    {
+      "title": "4Ke",
+      "description": "Pizza cuatro quesos",
+      "price": 1500,
+      "stock": 335,
+      "id": 3
+    }
+  ]

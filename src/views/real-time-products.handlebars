@@ -1,0 +1,16 @@
+<h1>Productos (Live)</h1>
+
+<ul id="containerProducts">
+    {{#each products}}
+        <li>
+            <p><b>{{title}}</b></p>
+            <p>Precio: ${{price}}</p>
+            <p>Descripción: {{description}}</p>
+            <p>Stock: {{stock}} Unidades</p>
+            <p>Categoría: {{category}}</p>
+        </li>
+        {{/each}}
+</ul>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script>

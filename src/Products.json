@@ -1,0 +1,42 @@
+[
+    {
+    "title": "Barrio Fino",
+    "description": "La pizza del Big Boss",
+    "price": 1200,
+    "thumbnail": "Sin Imagen",
+    "code": 0,
+    "stock": 300
+    },
+    {
+    "title": "Culebrita",
+    "description": "La pizza de la brita",
+    "price": 1200,
+    "thumbnail": "Sin Imagen",
+    "code": 1,
+    "stock": 150
+  },
+  {
+    "title": "Doble Muzza",
+    "description": "Con Muzza y medio",
+    "price": 1500,
+    "thumbnail": "Sin Imagen",
+    "code": 2,
+    "stock": 335
+  },
+  {
+    "title": "4 Ke",
+    "description": "Cuatro quesos",
+    "price": 1700,
+    "thumbnail": "Sin Imagen",
+    "code": 3,
+    "stock": 335
+  },
+  {
+    "title": "Roque y Miel",
+    "description": "Roquefort y Miel",
+    "price": 1800,
+    "thumbnail": "Sin Imagen",
+    "code": 4,
+    "stock": 335
+  }
+]

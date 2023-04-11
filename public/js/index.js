@@ -29,7 +29,7 @@ const fetchContenidoProductos = async () => {
   const url = getCurrentURL();
   const params = getParameters(url);
   const query = convertParamsToQuery(params);
-  const response = await fetch(`http://localhost:3737/api/product?${query}`);
+  const response = await fetch(`http://localhost:3000/api/product?${query}`);
   const data = await response.json();
   const myElement = document.getElementById("contenidoProductos");
   myElement.innerHTML = data.payload.map((product) => {
@@ -62,7 +62,7 @@ const fetchProducto = async () => {
   const url = getCurrentURL();
   const params = getParameters(url);
   const query = convertParamsToQuery(params);
-  const response = await fetch(`http://localhost:3737/api/product?${query}`);
+  const response = await fetch(`http://localhost:3000/api/product?${query}`);
   const data = await response.json();
   const myElement = document.getElementById("contenidoProductos");
 };

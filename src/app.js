@@ -7,8 +7,8 @@ import { engine } from "express-handlebars";
 
 
 const app = express();
-const httpServer = app.listen(8080, () => {
-    console.log("Server listening on port 8080");
+const httpServer = app.listen(3000, () => {
+    console.log("Server listening on port 3000");
 });
 
 app.use(express.json());
@@ -27,7 +27,7 @@ app.set("views", "./views");
 
 
 mongoose
-    .connect("mongodb+srv://burdio:7654321@cluster0.pzcooec.mongodb.net/?retryWrites=true&w=majority")
+    .connect("mongodb+srv://burdio:7654321@cluster0.pzcooec.mongodb.net/products?retryWrites=true&w=majority")
     .then((conn) => {
         console.log("Conected to MongoDB!!");
 });

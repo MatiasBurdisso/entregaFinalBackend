@@ -4,7 +4,7 @@ const cartsRouter = Router();
 
 const CartsManager = new DBManager.CartsManager();
 
-//This method will return the carts, and if given, filter them with a limit.
+//Este método devolverá los carros y, si se proporciona, los filtrará con un límite.
 cartsRouter.get("/", async (req, res) => {
   try {
     const limit = req.query.limit;
@@ -16,7 +16,7 @@ cartsRouter.get("/", async (req, res) => {
   }
 });
 
-//This method will return the cart with the corresponding id.
+//Este método devolverá el carrito con el id correspondiente.
 cartsRouter.get("/:cid", async (req, res) => {
   try {
     const id = req.params.cid;
@@ -28,7 +28,7 @@ cartsRouter.get("/:cid", async (req, res) => {
   }
 });
 
-//This method will add a cart to the collection.
+//Este método agregará un carrito a la colección.
 cartsRouter.post("/", async (req, res) => {
   try {
     const arr = req.body;
@@ -41,7 +41,7 @@ cartsRouter.post("/", async (req, res) => {
   }
 });
 
-//This method adds a product to the cart found by its id. If it already exists it only adds 1 to its quantity, else it will create it with an intial quantity of 1 unit.
+//Este método agrega un producto al carrito encontrado por su id. Si ya existe solo suma 1 a su cantidad, de lo contrario lo creará con una cantidad inicial de 1 unidad.
 cartsRouter.post("/:cid/:pid", async (req, res) => {
   try {
     const cid = req.params.cid;
@@ -58,7 +58,7 @@ cartsRouter.post("/:cid/:pid", async (req, res) => {
   }
 });
 
-//This method will delete a cart.
+//Este método eliminará un carrito.
 cartsRouter.delete("/:cid", async (req, res) => {
   try {
     const id = req.params.cid;
@@ -73,7 +73,7 @@ cartsRouter.delete("/:cid", async (req, res) => {
   }
 });
 
-//This method will delete a product within a cart.
+//Este método eliminará un producto dentro de un carrito.
 cartsRouter.delete("/:cid/products/:pid", async (req, res) => {
   try {
     const id = req.params.cid;
@@ -89,7 +89,7 @@ cartsRouter.delete("/:cid/products/:pid", async (req, res) => {
   }
 });
 
-//This method will updates the whole list of products in a cart.
+//Este método actualizará la lista completa de productos en un carrito.
 cartsRouter.put("/:cid", async (req, res) => {
   try {
     const id = req.params.cid;
@@ -106,7 +106,7 @@ cartsRouter.put("/:cid", async (req, res) => {
   }
 });
 
-//This method will update the quantity of a specific product within a specific cart.
+//Este método actualizará la cantidad de un producto específico dentro de un carrito específico.
 cartsRouter.put("/:cid/products/:pid", async (req, res) => {
   try {
     const id = req.params.cid;
@@ -124,7 +124,7 @@ cartsRouter.put("/:cid/products/:pid", async (req, res) => {
   }
 });
 
-//This method will delete all the products in a cart.
+//Este método eliminará todos los productos en un carrito.
 cartsRouter.delete("/:cid/products", async (req, res) => {
   try {
     const id = req.params.cid;
@@ -139,5 +139,5 @@ cartsRouter.delete("/:cid/products", async (req, res) => {
   }
 });
 
-//Exporting the router.
+//Exportando el enrutador.
 export default cartsRouter;

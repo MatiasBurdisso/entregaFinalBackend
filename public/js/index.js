@@ -1,93 +1,68 @@
-const socket = io();
+const elementExists = (id) => document.getElementById(id) !== null;
 
-let username;
+function getCurrentURL() {
+  return window.location.href;
+}
 
-Swal.fire({
-    title: 'Identificate',
-    input : "text",
-    text: "Ingresa tu nombre",
-    inputValidator: (value) =>{
-        return !value && "Es obligatorio introducir tu nombre de usuario";
-    },
-    allowOutsideClick: false,
-}).then((result) => {
-    console.log(result);
+function getParameters(currentURL) {
+  const myParams = {};
+  let urlString = currentURL;
+  let paramString = urlString.split("?")[1];
+  let queryString = new URLSearchParams(paramString);
+  for (let pair of queryString.entries()) {
+    myParams[pair[0]] = pair[1];
+  }
+  return myParams;
+}
 
-    username = result.value;
-    
-});
-
-const chatInput = document.getElementById("chat-input");
-chatInput.addEventListener("keyup", (ev) =>{
-    if (ev.key === "Enter") {
-        const inputMessage = chatInput.value;
-
-        if (inputMessage.trim().length > 0) {
-            socket.emit("chat-message", { username, message: inputMessage });
-
-            chatInput.value = "";
-            
-        }
+const convertParamsToQuery = (params) => {
+  let query = "";
+  for (const key in params) {
+    if (params.hasOwnProperty(key)) {
+      const value = params[key];
+      query += `${key}=${value}&`;
     }
-});
+  }
+  return query;
+};
+const fetchContenidoProductos = async () => {
+  const url = getCurrentURL();
+  const params = getParameters(url);
+  const query = convertParamsToQuery(params);
+  const response = await fetch(`http://localhost:3737/api/product?${query}`);
+  const data = await response.json();
+  const myElement = document.getElementById("contenidoProductos");
+  myElement.innerHTML = data.payload.map((product) => {
+    return `
+            <div class="card col-3">
+                <img src="${product.thumbnail}" class="card-img-top" alt="...">
+                <div class="card-body">
+                <h5 class="card-title">${product.title}</h5>
+                <p class="card-text">${product.description}</p>
+                <p class="card-text">${product.price}</p>
+                <a href="#" id=${product._id} class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+            `;
+  });
 
-const messagesPanel = document.getElementById("messages-panel");
-socket.on("messages", (data) => {
-    
-    let messages = "";
-
-    data.forEach((m) => {
-        messages += `<b>${m.username}: </b> ${m.message}</br>`;
+  const buttons = document.querySelectorAll(".btn");
+  buttons.forEach((button) => {
+    button.addEventListener("click", (e) => {
+      e.preventDefault();
+      const id = e.target.id;
+      console.log(id);
+      window.location.href = `/product/${id}`;
     });
+  });
+};
+elementExists("contenidoProductos") && fetchContenidoProductos();
 
-    messagesPanel.innerHTML = messages;
-});
-
-const containerProducts = document.getElementById("containerProducts")
-
-socket.on("new-product", (data)=>{
-    containerProducts.innerHTML += `
-                                    <li>
-                                        <p><b>${data.title}</b></p>
-                                        <p>Precio: $ ${data.price}</p>
-                                        <p>Descripción: ${data.description}</p>
-                                        <p>Stock: ${data.stock}</p>
-                                        <p>Categoría: ${data.category}</p>
-                                    </li>
-                                    `
-})
-
-socket.on("delete-product", (products)=>{
-    containerProducts.innerHTML = ""
-    products.forEach( prod => {
-        containerProducts.innerHTML += `
-                                        <li>
-                                            <p><b>${prod.title}</b></p>
-                                            <p>Precio: $ ${prod.price}</p>
-                                            <p>Descripción: ${prod.description}</p>
-                                            <p>Stock: ${prod.stock}</p>
-                                            <p>Categoría: ${prod.category}</p>
-                                        </li>
-                                        `
-    }) 
-})
-
-socket.on("update-product", (products)=>{
-    containerProducts.innerHTML = ""
-    products.forEach( prod => {
-        containerProducts.innerHTML += `
-                                        <li>
-                                            <p><b>${prod.title}</b></p>
-                                            <p>Precio: $ ${prod.price}</p>
-                                            <p>Descripción: ${prod.description}</p>
-                                            <p>Stock: ${prod.stock}</p>
-                                            <p>Categoría: ${prod.category}</p>
-                                        </li>
-                                        `
-    }) 
-})
-socket.emit("messege", "Saludos departe de Somos Pacifica");
-
-socket.on("messege", (data) =>{
-    console.log(data);
-})
+const fetchProducto = async () => {
+  const url = getCurrentURL();
+  const params = getParameters(url);
+  const query = convertParamsToQuery(params);
+  const response = await fetch(`http://localhost:3737/api/product?${query}`);
+  const data = await response.json();
+  const myElement = document.getElementById("contenidoProductos");
+};
